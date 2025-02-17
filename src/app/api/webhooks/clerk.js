@@ -1,8 +1,8 @@
 import { database, firestore } from "@/utils/db/firebase";
 
 export async function POST(req) {
-    console.log("what,", body, body.type)
     const body = await req.json()
+    console.log("what,", body, body.type)
     switch (body.type) {
         case "user.created":
             const uid = body.data.id;
