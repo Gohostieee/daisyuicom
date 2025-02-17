@@ -21,6 +21,6 @@ export async function POST(req) {
             return Response.json('success')
             break;
         default:
-            return Response.error()
+            return Response.json('error')
     }
 }
