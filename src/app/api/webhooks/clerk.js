@@ -1,4 +1,4 @@
-import { database } from "@/utils/db/firebase";
+import { database, firestore } from "@/utils/db/firebase";
 
 export async function POST(req) {
     const body = await req.json()
@@ -7,12 +7,12 @@ export async function POST(req) {
             const uid = body.data.id;
             const username = body.data.username;
             const createdAt = body.data.created_at;
-
-            database.ref(`users-clerk`).child(uid).set({
+            firestore.collection('users-clerk').doc(uid).set({
                 uid,
                 username,
                 createdAt
             })
+            return Response.json('success')
             break;
         default:
             return Response.error()
