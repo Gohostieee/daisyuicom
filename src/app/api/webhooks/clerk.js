@@ -1,4 +1,4 @@
-import { database, firestore } from "@/utils/db/firebase";
+import { firestore } from "@/utils/db/firebase";
 
 export async function POST(req) {
     const body = await req.json()
