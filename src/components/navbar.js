@@ -2,24 +2,9 @@
 
 import { useUserStore } from "@/utils/state/auth"
 import { SignedIn, SignedOut, SignIn, SignInButton, SignUp, UserButton, UserProfile } from "@clerk/nextjs";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTitle } from "./ui/dialog";
+import SignInUpDialog from "./ui/SignInUpDialog";
 
-const SignInUpDialog = ({ trigger, content, title }) => {
-    return (
-        <Dialog>
-            <DialogTrigger>{trigger}</DialogTrigger>
-            <DialogContent className="bg-base-100 grid grid-cols-1 items-center justify-items-center shadow-2xl">
-                <DialogHeader>
-                    <DialogTitle>
-                        {title}
-                    </DialogTitle>
-                </DialogHeader>
-                {content}
-            </DialogContent>
-        </Dialog>
-    )
 
-}
 
 
 export default function Navbar() {
