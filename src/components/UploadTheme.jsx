@@ -17,6 +17,8 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import ThemePreview from "./ThemePreview";
+import { uploadTheme } from "@/utils/db/actions";
+import { Loader2 } from "lucide-react";
 
 
 const v4PlaceHolder = `"primary": "#00a4ff",          
@@ -69,18 +71,37 @@ export default function UploadTheme() {
         register,
         handleSubmit,
         formState: { errors },
-        getValues
+        getValues,
+        reset
     } = useForm()
     const [css, setCss] = useState("")
     const [open, setOpen] = useState(false)
-    const onSubmit = (data) => console.log(data)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
+
+
+    const onSubmit = (data) => {
+        setLoading(true)
+        uploadTheme(data)
+            .then(res => {
+                setLoading(false)
+                if (res.error) {
+                    setError("Error uploading your theme!")
+                    console.error(res.message)
+                } else {
+                    setOpen(false)
+                    setError("")
+                    reset()
+                }
+            })
+    }
 
     return (
         <div>
             <SignedIn>
                 <Dialog onOpenChange={setOpen} open={open}>
                     <DialogTrigger asChild>
-                        <Button>
+                        <Button className="text-primary-content">
                             Upload Theme
                         </Button>
                     </DialogTrigger>
@@ -94,6 +115,24 @@ export default function UploadTheme() {
                             </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleSubmit(onSubmit)}>
+                            {
+                                error != "" && (
+                                    <div role="alert" className="alert alert-error">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-6 w-6 shrink-0 stroke-current"
+                                            fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>{error}</span>
+                                    </div>
+                                )
+                            }
                             <div>
                                 <Label htmlFor="title">
                                     Title
@@ -118,18 +157,25 @@ export default function UploadTheme() {
                                     <TabsContent value="v4">
                                         <p className="text-sm ml-2 mb-2">Export your theme from the <a className="link font-medium" href="https://daisyui.com/theme-generator/" target="_blank">V4 theme generator</a></p>
                                         <Textarea id="theme" className="h-64" placeholder={v4PlaceHolder} {...register("theme", { required: true })} />
-                                        <ThemePreview trigger={<Button className="mt-2 text-xs" >Preview</Button>} css={() => getValues().theme} />
+                                        <ThemePreview mode="v4" trigger={<Button className="mt-2 text-xs" >Preview</Button>} css={() => getValues().theme} />
                                     </TabsContent>
                                     <TabsContent value="v5">
                                         <p className="text-sm ml-2 mb-2">Export your theme from the <a className="link font-medium" href="https://v5.daisyui.com/theme-generator//" target="_blank">V5 theme generator</a></p>
                                         <Textarea onChange={e => setCss(e.target.value)} id="theme" className="h-64" placeholder={v5PlaceHolder} {...register("theme", { required: true })} />
-                                        <ThemePreview trigger={<Button className="mt-2 text-xs" onClick={() => { setCss(getValues().theme) }}>Preview</Button>} css={css} />
+                                        <ThemePreview mode="v5" trigger={<Button className="mt-2 text-xs">Preview</Button>} css={() => getValues().theme} />
                                     </TabsContent>
                                 </Tabs>
                             </div>
-                            <Button type="submit" className="mt-2 w-full">
-                                Submit
-                            </Button>
+                            {
+                                !loading ?
+                                    <Button type="submit" className="mt-2 w-full text-primary-content">
+                                        Submit
+                                    </Button> :
+                                    <Button disabled className="mt-2 w-full text-primary-content">
+                                        <Loader2 className="animate-spin" />
+                                        Please wait
+                                    </Button>
+                            }
                         </form>
                     </DialogContent>
                 </Dialog>
@@ -137,12 +183,12 @@ export default function UploadTheme() {
             <SignedOut>
                 <TooltipProvider>
                     <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button className="opacity-75">
+                        <TooltipTrigger >
+                            <p className="opacity-75 bg-primary py-2 px-4 rounded-md text-sm font-medium text-primary-content">
                                 Upload Theme
-                            </Button>
+                            </p>
                         </TooltipTrigger>
-                        <TooltipContent className="font-medium">
+                        <TooltipContent className="font-medium text-primary-content">
                             You are not logged in!
                         </TooltipContent>
                     </Tooltip>
