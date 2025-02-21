@@ -2,9 +2,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {
   ClerkProvider,
+  useUser,
 } from '@clerk/nextjs'
 import Navbar from "@/components/navbar";
-import ThemeWrapper from "@/components/ThemeWrapper";
+import { Toaster } from "@/components/ui/toaster";
+import ContextWrapper from "@/components/ContextWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +25,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">
-        <ThemeWrapper>
+        <ContextWrapper>
+          <Toaster />
           <Navbar />
           {children}
-        </ThemeWrapper>
+        </ContextWrapper>
       </html >
     </ClerkProvider>
 

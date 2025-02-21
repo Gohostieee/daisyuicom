@@ -10,7 +10,6 @@ import SignInUpDialog from "./ui/SignInUpDialog";
 export default function Navbar() {
     const user = useUserStore((state) => state.user);
     const btnClass = "underline hover:text-lg hover:bg-primary hover:text-primary-content px-4 py-1 capitalize transition-all"
-    console.log(user)
     return (
         <div className="w-screen h-12  px-16 border-b border-primary shadow-2xl grid grid-cols-3 items-center ">
             <div className="border-r flex items-center h-full border-neutral';

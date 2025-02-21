@@ -1,10 +1,5 @@
-import { useThemeStore } from "@/utils/state/theme";
-import { Button } from "./ui/button";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
 import chroma from "chroma-js";
-import { get } from "react-hook-form";
 import { interpolate, useMode as notAHookUseMode, oklch, wcagContrast } from "culori";
-import { useEffect } from "react";
 
 const colorNames = {
     "primary": "--p",
@@ -126,7 +121,7 @@ function createCSSFromJSON(json) {
     for (const key in json) {
         if (json.hasOwnProperty(key)) {
             const value = json[key];
-            let cssKey = key?.replace("--color-", "").trim();
+            let cssKey = key?.trim();
             let cssValue = value;
             if (cssValue?.includes("oklch(") && (colorNames[cssKey] || optionalColors[cssKey])) {
                 cssValue = cssValue.replace("oklch(", "")
@@ -163,41 +158,25 @@ function applyTheme(themeJSON, selector = '[data-theme]') { // Added selector pa
     styleElement.innerText = `${cssString}  `; // Wrap in the selector
 }
 
-export default function ThemePreview({ trigger, css: getCSS, mode }) {
-    useEffect(() => {
-        try {
-            notAHookUseMode(oklch)
-        } catch { }
-    }, [])
-    const changeTheme = useThemeStore((state) => state.changeTheme)
-    function onClick() {
-        const css = getCSS()
-        let cssJson = {};
-        try {
-            css.split('\n').forEach(split => {
-                let [key, value] = split.split(":")
-                key = key?.replaceAll(`"`, ``).replaceAll("'", "").trim()
-                value = value?.replaceAll(',', '').replaceAll(`"`, ``).replaceAll("'", "").trim()
-                if (key && value) {
-                    cssJson[key] = value
-                }
 
-            })
-        } catch (e) {
-            cssJson = null
-            console.error(e)
-        }
-        if (mode === "v4") {
-            generateOptionalColours(cssJson)
-        }
+export function setThemePreview(css, changeTheme) {
 
-        applyTheme(cssJson, '#theme-style')
-        changeTheme("custom")
+    let cssJson = {};
+    try {
+        css.split('\n').forEach(split => {
+            let [key, value] = split.split(":")
+            key = key?.replaceAll(`"`, ``).replaceAll("'", "").replace("--color-", "").trim()
+            value = value?.replaceAll(',', '').replaceAll(`"`, ``).replaceAll("'", "").trim()
+            if (key && value) {
+                cssJson[key] = value
+            }
+
+        })
+    } catch (e) {
+        cssJson = null
+        console.error(e)
     }
-    return (
-        <Button onClick={onClick} type="button" className="text-secondary-content bg-secondary mt-2 w-full">
-            Preview
-        </Button>
-    )
+    generateOptionalColours(cssJson)
+    applyTheme(cssJson, '#theme-style')
+    changeTheme("custom")
 }
-

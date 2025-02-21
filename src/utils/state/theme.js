@@ -2,6 +2,6 @@ import { create } from 'zustand'
 
 
 export const useThemeStore = create((set) => ({
-    currentTheme: "retro",
+    currentTheme: "nord",
     changeTheme: async (newTheme) => set({ currentTheme: newTheme })
 }))

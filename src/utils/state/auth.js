@@ -3,6 +3,14 @@ import { create } from 'zustand'
 
 
 export const useUserStore = create((set) => ({
-    currentUser: null,
-    refreshUser: async () => set({ currentUser: useAuth() })
+    userData: {},
+    refreshUserData: async (userData) => set({ userData: userData }),
+    updateUserData: (updateFields) => set((state) => {
+        return {
+            userData: {
+                ...state.userData,
+                ...updateFields
+            }
+        }
+    })
 }))
