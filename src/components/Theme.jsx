@@ -29,7 +29,7 @@ export default function Theme({ theme, index, themes, setThemes }) {
         const increment = userData?.likes?.includes(themeID) ? -1 : 1
 
         if (increment > 0) {
-            userData.likes.push(themeID)
+            userData.likes = [...userData?.likes || ...[], themeID]
             const addedLikes = [...userData.likes]
             updateUserData({
                 likes: addedLikes
@@ -49,7 +49,8 @@ export default function Theme({ theme, index, themes, setThemes }) {
         if (!res.error && increment != res.increment) {
 
             if (res.increment > 0) {
-                userData.likes.push(themeID)
+                userData.likes = [...userData.likes || ...[], themeID]
+        
                 const addedLikes = [...userData.likes]
                 updateUserData({
                     likes: addedLikes
