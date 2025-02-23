@@ -79,7 +79,7 @@ export async function getUserData(uid) {
     if (userSnapshot.exists) {
         return userSnapshot.data()
     } else {
-        const createdAt = Timestamp.now();
+        const createdAt = Timestamp.now().toDate();
         const user = await currentUser();
         const username = user?.username || ""
         await firestore.collection("users-clerk").doc(uid).set({
