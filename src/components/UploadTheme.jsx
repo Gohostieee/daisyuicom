@@ -66,7 +66,7 @@ color-scheme: "dark";
 `
 
 
-export default function UploadTheme() {
+export default function UploadTheme({ refreshThemes }) {
     const {
         register,
         handleSubmit,
@@ -91,6 +91,7 @@ export default function UploadTheme() {
                 } else {
                     setOpen(false)
                     setError("")
+                    refreshThemes(count => count + 1)
                     reset()
                 }
             })
