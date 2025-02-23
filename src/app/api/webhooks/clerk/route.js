@@ -8,10 +8,11 @@ export async function POST(req) {
             const username = body.data.username;
             const createdAt = body.data.created_at;
             const userSnapshot = await firestore.collection('users-clerk').doc(uid).get()
-            await firestore.collection('users-clerk').doc(uid).set({
+            await firestore.collection('users-clerk').doc(uid).update({
                 uid,
                 username,
-                createdAt
+                createdAt,
+                likes: []
             })
             return Response.json('success')
             break;

@@ -75,5 +75,24 @@ export const likeTheme = async (themeID) => {
 }
 
 export async function getUserData(uid) {
-    return await (await firestore.collection("users-clerk").doc(uid).get()).data()
+    const userSnapshot = (await firestore.collection("users-clerk").doc(uid).get())
+    if (userSnapshot.exists) {
+        return userSnapshot.data()
+    } else {
+        const createdAt = Timestamp.now();
+        const user = await currentUser();
+        const username = user?.username || ""
+        await firestore.collection("users-clerk").doc(uid).update({
+            username,
+            uid,
+            createdAt,
+            likes: []
+        })
+        return ({
+            username,
+            uid,
+            createdAt,
+            likes: []
+        })
+    }
 }

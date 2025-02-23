@@ -21,15 +21,12 @@ export default function Theme({ theme, index, themes, setThemes }) {
     }
 
     async function onClick(themeID, index) {
-        toast({
-            title: "Copied theme!1",
-            description: `${theme.title} ${userData} ${userData?.likes} has been copied to the clipboard`
-        })
+
         const oldLikes = themes[index].likes
         const increment = userData?.likes?.includes(themeID) ? -1 : 1
 
         if (increment > 0) {
-            userData.likes = [...userData?.likes || ...[], themeID]
+            userData.likes = [...(userData?.likes || []), themeID]
             const addedLikes = [...userData.likes]
             updateUserData({
                 likes: addedLikes
@@ -47,10 +44,9 @@ export default function Theme({ theme, index, themes, setThemes }) {
         })
         const res = await likeTheme(themeID)
         if (!res.error && increment != res.increment) {
-
             if (res.increment > 0) {
-                userData.likes = [...userData.likes || ...[], themeID]
-        
+                userData.likes = [...(userData?.likes || []), themeID]
+
                 const addedLikes = [...userData.likes]
                 updateUserData({
                     likes: addedLikes
@@ -61,7 +57,6 @@ export default function Theme({ theme, index, themes, setThemes }) {
                     likes: removedLikes
                 })
             }
-
             setThemes(themes => {
                 const newThemes = [...themes]
                 newThemes[index].likes = oldLikes + res.increment;
