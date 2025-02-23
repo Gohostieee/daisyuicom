@@ -23,9 +23,12 @@ export const uploadTheme = async (theme) => {
 export const getThemes = async () => {
     const docs = (await firestore.collection("themes").get())
     const docsData = []
-    docs.forEach(doc => {
-        docsData.push({ ...doc.data(), id: doc.id })
+    let index = 0;
+    docs.forEach((doc) => {
+        docsData.push({ ...doc.data(), id: doc.id, order: index })
+        index++
     })
+    console.log(docsData)
     return docsData
 }
 
