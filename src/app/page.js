@@ -27,10 +27,10 @@ export default function Home() {
 				newThemes = [...themes.sort((a, b) => a.title.localeCompare(b.title))]
 				break;
 			case "liked":
-				newThemes = [...themes.sort((a, b) => b?.likes || 0 - a?.likes || 0)]
+				newThemes = [...themes.sort((a, b) => b.likes - a.likes)]
 				break;
 			default:
-				newThemes = [...themes.sort((a, b) => b.order || 0 - a.order || 0)]
+				newThemes = [...themes.sort((a, b) => b.order - a.order)]
 		}
 		console.log(newThemes)
 		setThemes(newThemes)
