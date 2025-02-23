@@ -8,9 +8,6 @@ export async function POST(req) {
             const username = body.data.username;
             const createdAt = body.data.created_at;
             const userSnapshot = await firestore.collection('users-clerk').doc(uid).get()
-            if (userSnapshot.exists()) {
-                return Response.error()
-            }
             await firestore.collection('users-clerk').doc(uid).set({
                 uid,
                 username,
