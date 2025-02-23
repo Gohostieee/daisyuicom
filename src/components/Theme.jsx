@@ -21,8 +21,12 @@ export default function Theme({ theme, index, themes, setThemes }) {
     }
 
     async function onClick(themeID, index) {
+        toast({
+            title: "Copied theme!1",
+            description: `${theme.title} ${userData} ${userData?.likes} has been copied to the clipboard`
+        })
         const oldLikes = themes[index].likes
-        const increment = userData.likes.includes(themeID) ? -1 : 1
+        const increment = userData?.likes?.includes(themeID) ? -1 : 1
 
         if (increment > 0) {
             userData.likes.push(themeID)
