@@ -91,7 +91,7 @@ export default function Theme({ theme, index, themes, setThemes }) {
             </p>
             <SignedIn>
                 {
-                    userData.likes?.includes(theme.id)
+                    userData?.likes?.includes(theme.id)
                         ? (
                             <Button onClick={() => onClick(theme.id, index)} className="mt-3 text-lg font-medium text-primary-content ">
                                 {theme.likes}
