@@ -8,7 +8,7 @@ export async function POST(req) {
             const username = body.data.username;
             const createdAt = body.data.created_at;
             const userSnapshot = await firestore.collection('users-clerk').doc(uid).get()
-            await firestore.collection('users-clerk').doc(uid).update({
+            await firestore.collection('users-clerk').doc(uid).set({
                 uid,
                 username,
                 createdAt,

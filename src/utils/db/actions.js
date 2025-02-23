@@ -82,7 +82,7 @@ export async function getUserData(uid) {
         const createdAt = Timestamp.now();
         const user = await currentUser();
         const username = user?.username || ""
-        await firestore.collection("users-clerk").doc(uid).update({
+        await firestore.collection("users-clerk").doc(uid).set({
             username,
             uid,
             createdAt,
